@@ -466,7 +466,14 @@ abstract class QuickBooks_IPP_Service
 		$body = $Object->asXML(0, null, null, null, QuickBooks_IPP_IDS::VERSION_3);
 
 		if ($resource === QuickBooks_IPP_IDS::RESOURCE_TAXSERVICE) {
-			$body = json_encode(simplexml_load_string($body));
+			$dataObject = (array) simplexml_load_string($body);
+			$dataObject['TaxRateDetails'] = is_array($dataObject['TaxRate']) ? $dataObject['TaxRate'] : [$dataObject['TaxRate']];
+			unset($dataObject['TaxRate']);
+			foreach ($dataObject['TaxRateDetails'] as &$detail) {
+				$detail = (array) $detail;
+			}
+			$body = json_encode($dataObject, JSON_PRETTY_PRINT);
+
 		}
 
 		// Send the data to IPP
