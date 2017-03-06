@@ -153,7 +153,7 @@ class QuickBooks_XML_Parser
 			
 			return '';
 		}
-		else if (substr(trim($mixed), 0, 1) != '<')
+		else if (substr(trim($mixed), 0, 1) != '<' && substr(trim($mixed), 0, 1) != '{')
 		{
 			return file_get_contents($mixed);
 		}

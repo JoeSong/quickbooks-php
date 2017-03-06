@@ -166,6 +166,8 @@ class QuickBooks_IPP_IDS
 	
 	const RESOURCE_TAXAGENCY = 'TaxAgency';
 
+	const RESOURCE_TAXSERVICE = 'TaxService/TaxCode';
+
 	const RESOURCE_TIMEACTIVITY = 'TimeActivity';
 	
 	/**

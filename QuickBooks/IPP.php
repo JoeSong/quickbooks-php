@@ -334,7 +334,7 @@ class QuickBooks_IPP
 		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IPP, $url, $action, $xml);
 
 		if (!$this->_hasErrors($response) and
-			$ticket = QuickBooks_XML::extractTagContents('ticket', $response))
+		    $ticket = QuickBooks_XML::extractTagContents('ticket', $response))
 		{
 			$this->_ticket = $ticket;
 
@@ -350,7 +350,7 @@ class QuickBooks_IPP
 				'qbn.gauthid',
 				'qbn.agentid',
 				'iamValidationTime'
-				);
+			);
 
 			foreach ($cookies as $cookie)
 			{
@@ -398,8 +398,8 @@ class QuickBooks_IPP
 				$User = $this->getUserInfo($Context);
 
 				if (!$User or
-					!is_object($User) or
-					$User->isAnonymous())
+				    !is_object($User) or
+				    $User->isAnonymous())
 				{
 					return null;
 				}
@@ -1070,11 +1070,11 @@ class QuickBooks_IPP
 			$post = false;
 			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '/' . $ID . '/pdf?requestid=' . $guid . '&minorversion=6';
 		}
-      else if ($optype == QuickBooks_IPP_IDS::OPTYPE_SEND)
-      {
-         $post = true;
-         $url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '/' . $ID . '/send?requestid=' . $guid . '&minorversion=6';
-      }
+		else if ($optype == QuickBooks_IPP_IDS::OPTYPE_SEND)
+		{
+			$post = true;
+			$url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '/' . $ID . '/send?requestid=' . $guid . '&minorversion=6';
+		}
 
 		$response = $this->_request($Context, QuickBooks_IPP::REQUEST_IDS, $url, $optype, $xml, $post);
 
@@ -1138,38 +1138,38 @@ class QuickBooks_IPP
 
 		// This is because IDS v2 with QuickBooks Online is retarded
 		if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and
-			$resource == QuickBooks_IPP_IDS::RESOURCE_PAYMENTMETHOD)
+		    $resource == QuickBooks_IPP_IDS::RESOURCE_PAYMENTMETHOD)
 		{
 			$resource = 'payment-method';
 		}
 		else if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and
-			$resource == QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT)
+		         $resource == QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT)
 		{
 			$resource = 'sales-receipt';
 		}
 		else if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and
-			$resource == QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY)
+		         $resource == QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY)
 		{
 			$resource = 'time-activity';
 		}
 		else if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and
-			$resource == QuickBooks_IPP_IDS::RESOURCE_JOURNALENTRY)
+		         $resource == QuickBooks_IPP_IDS::RESOURCE_JOURNALENTRY)
 		{
 			$resource = 'journal-entries';
 		}
 		else if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and
-			$resource == QuickBooks_IPP_IDS::RESOURCE_BILLPAYMENT)
+		         $resource == QuickBooks_IPP_IDS::RESOURCE_BILLPAYMENT)
 		{
 			$resource = 'bill-payment';
 		}
 
 		if ($this->flavor() == QuickBooks_IPP_IDS::FLAVOR_ONLINE and
-			$optype == QuickBooks_IPP_IDS::OPTYPE_QUERY)
+		    $optype == QuickBooks_IPP_IDS::OPTYPE_QUERY)
 		{
 			// Make the resource plural... (unless it's the changedatadeleted) *sigh*
 			if ($resource == QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY)
 			{
-			    $resource = 'time-activities';
+				$resource = 'time-activities';
 			}
 			else if ($resource == QuickBooks_IPP_IDS::RESOURCE_CLASS)
 			{
@@ -1177,13 +1177,13 @@ class QuickBooks_IPP
 			}
 			else if ($resource != QuickBooks_IPP_IDS::RESOURCE_CHANGEDATADELETED)
 			{
-			    $resource .= 's';
-            }
+				$resource .= 's';
+			}
 		}
 
 		$post = true;
 		if ($resource == QuickBooks_IPP_IDS::RESOURCE_COMPANY or 		// QuickBooks desktop
-			$resource == QuickBooks_IPP_IDS::RESOURCE_COMPANYMETADATA)	// QuickBooks online
+		    $resource == QuickBooks_IPP_IDS::RESOURCE_COMPANYMETADATA)	// QuickBooks online
 		{
 			$post = false;
 			$xml = '';
@@ -1220,15 +1220,15 @@ class QuickBooks_IPP
 		}
 		else
 		{
-		    // Case matters on "syncActivity" #fun (everything else is lower cased)
-		    if (strtolower($resource) == 'syncactivity')
-		    {
-		    	$resource = 'syncActivity';
-		    }
-		    else
-		    {
-		    	$resource = strtolower($resource); // everything else should be lowercase
-		    }
+			// Case matters on "syncActivity" #fun (everything else is lower cased)
+			if (strtolower($resource) == 'syncactivity')
+			{
+				$resource = 'syncActivity';
+			}
+			else
+			{
+				$resource = strtolower($resource); // everything else should be lowercase
+			}
 
 			$url = $this->_baseurl . '/' . $resource . '/' . $this->_ids_version . '/' . $realmID;
 		}
@@ -1319,7 +1319,7 @@ class QuickBooks_IPP
 			$line = substr($line, 12);
 
 			if (substr($line, 0, strlen($name)) == $name and
-				false !== ($pos = strpos($line, ';')))
+			    false !== ($pos = strpos($line, ';')))
 			{
 				return substr($line, strlen($name) + 1, $pos - strlen($name) - 1);
 			}
@@ -1465,21 +1465,30 @@ class QuickBooks_IPP
 		return $this->_log($message, $level);
 	}
 
+	protected function _isJson($string) {
+		json_decode($string);
+		return (json_last_error() == JSON_ERROR_NONE);
+	}
+
 	protected function _request($Context, $type, $url, $action, $data, $post = true)
 	{
 		$headers = array(
-			);
+		);
 
 		//print('[' . $this->_flavor . '], ACTION [' . $action . ']');
 
 		if ($Context->IPP()->version() == QuickBooks_IPP_IDS::VERSION_3)
 		{
 			if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or
-				$action == QuickBooks_IPP_IDS::OPTYPE_MOD or
-				$action == QuickBooks_IPP_IDS::OPTYPE_VOID or
-				$action == QuickBooks_IPP_IDS::OPTYPE_DELETE)
+			    $action == QuickBooks_IPP_IDS::OPTYPE_MOD or
+			    $action == QuickBooks_IPP_IDS::OPTYPE_VOID or
+			    $action == QuickBooks_IPP_IDS::OPTYPE_DELETE)
 			{
 				$headers['Content-Type'] = 'application/xml';
+
+				if ($this->_isJson($data)) {
+					$headers['Content-Type'] = 'application/json';
+				}
 			}
 			else
 			{
@@ -1492,6 +1501,11 @@ class QuickBooks_IPP
 			if ($type == QuickBooks_IPP::REQUEST_IPP)
 			{
 				$headers['Content-Type'] = 'application/xml';
+
+				if ($this->_isJson($data)) {
+					$headers['Content-Type'] = 'application/json';
+				}
+
 				$headers['QUICKBASE-ACTION'] = $action;
 			}
 			else if ($type == QuickBooks_IPP::REQUEST_IDS)
@@ -1505,6 +1519,11 @@ class QuickBooks_IPP
 					if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or $action == QuickBooks_IPP_IDS::OPTYPE_MOD or $action == QuickBooks_IPP_IDS::OPTYPE_DELETE)
 					{
 						$headers['Content-Type'] = 'application/xml';
+
+						if ($this->_isJson($data)) {
+							$headers['Content-Type'] = 'application/json';
+						}
+
 					}
 					else
 					{
@@ -1519,7 +1538,7 @@ class QuickBooks_IPP
 		{
 			// If we have credentials, sign the request
 			if ($this->_authcred['oauth_access_token'] and
-				$this->_authcred['oauth_access_token_secret'])
+			    $this->_authcred['oauth_access_token_secret'])
 			{
 				/*
 				//// **** TEST STUFF **** ////
@@ -1559,10 +1578,10 @@ class QuickBooks_IPP
 				}
 
 				$signdata = null;
-				if ($data and
-					$data[0] == '<')
+				if (($data and
+				     $data[0] == '<') || $this->_isJson($data))
 				{
-					// It's an XML body, we don't sign that
+					// It's an XML or JSON body, we don't sign that
 					$signdata = null;
 				}
 				else
@@ -1596,7 +1615,7 @@ class QuickBooks_IPP
 					// Remove any whitespace padding before checking
 					$data = trim($data);
 
-					if ($data and $data[0] == '<')
+					if (($data and $data[0] == '<')  || $this->_isJson($data))
 					{
 						// Do nothing
 					}
