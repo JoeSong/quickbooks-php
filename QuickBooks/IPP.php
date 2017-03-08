@@ -1105,24 +1105,32 @@ class QuickBooks_IPP
 		$err_desc = null;
 		$err_db = null;
 
-		// Try to parse the responses into QuickBooks_IPP_Object_* classes
-		$parsed = $Parser->parseIDS($data, $optype, $this->flavor(), QuickBooks_IPP_IDS::VERSION_3, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
+		if(strpos($response, 'Content-Type: application/json;charset=UTF-8') === false) {
 
-		$this->_setLastDebug(__CLASS__, array( 'ids_parser_duration' => microtime(true) - $start ));
+			// Try to parse the responses into QuickBooks_IPP_Object_* classes
+			$parsed = $Parser->parseIDS($data, $optype, $this->flavor(), QuickBooks_IPP_IDS::VERSION_3, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
 
-		if ($xml_errnum != QuickBooks_XML::ERROR_OK)
-		{
-			// Error parsing the returned XML?
-			$this->_setError(QuickBooks_IPP::ERROR_XML, 'XML parser said: ' . $xml_errnum . ': ' . $xml_errmsg);
+			$this->_setLastDebug(__CLASS__, array('ids_parser_duration' => microtime(true) - $start));
 
-			return false;
-		}
-		else if ($err_code != QuickBooks_IPP::ERROR_OK)
-		{
-			// Some other IPP error
-			$this->_setError($err_code, $err_desc, 'Database error code: ' . $err_db);
+			if ($xml_errnum != QuickBooks_XML::ERROR_OK) {
+				// Error parsing the returned XML?
+				$this->_setError(QuickBooks_IPP::ERROR_XML, 'XML parser said: ' . $xml_errnum . ': ' . $xml_errmsg);
 
-			return false;
+				return false;
+			} else if ($err_code != QuickBooks_IPP::ERROR_OK) {
+				// Some other IPP error
+				$this->_setError($err_code, $err_desc, 'Database error code: ' . $err_db);
+
+				return false;
+			}
+		} else {
+			$parsed = json_decode($data);
+			if (!$parsed) {
+				// Some other IPP error
+				$this->_setError($err_code, $err_desc, 'JSON could not be decoded');
+
+				return false;
+			}
 		}
 
 		// Return the parsed response
